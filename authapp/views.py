@@ -25,7 +25,7 @@ class CustomLoginView(LoginView):
 	template_name = 'registration/login.html'
 
 	def form_valid(self, form):
-		user = User.objects.get(username=self.request.user.username)
+		user = User.objects.get(username=form.cleaned_data.get('username'))
 		if user.email == '':
 			return redirect('/email_confirmation')
 		else:
@@ -45,7 +45,8 @@ class EmailConfirmation(View):
 		if form.is_valid():
 			current_site = get_current_site(request)
 			message = render_to_string('active_email.html',{
-            	'user':self.request.user, 
+            	'user':self.request.user,
+            	'email': form.cleaned_data.get('email'),
             	'domain':current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(self.request.user.pk)),
                 'token': account_activation_token.make_token(self.request.user),

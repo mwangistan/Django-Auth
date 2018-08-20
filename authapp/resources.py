@@ -14,16 +14,15 @@ class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
 account_activation_token = AccountActivationTokenGenerator()
 
 
-def activate(request, uidb64, token):
+def activate(request, uidb64, token, email):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
-        print('here')
         user.is_active = True
-        user.email = ''
+        user.email = email
         user.save()
         return redirect('/account/two_factor/setup/')
     else:
