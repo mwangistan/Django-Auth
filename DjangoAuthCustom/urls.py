@@ -16,11 +16,14 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from authapp import views
+from authapp import resources
 from two_factor.urls import urlpatterns as tf_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^email_confirmation/', views.EmailConfirmation.as_view(), name='email_confirmation'),
     url(r'', include(tf_urls)),
-    url(r'^login/$', views.CustomLoginView.as_view(), name='login')
+    url(r'^login/$', views.CustomLoginView.as_view(), name='login'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        resources.activate, name='activate'),
 ]
