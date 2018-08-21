@@ -23,7 +23,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^email_confirmation/', views.EmailConfirmation.as_view(), name='email_confirmation'),
     url(r'', include(tf_urls)),
-    url(r'^login/$', views.CustomLoginView.as_view(), name='login'),
+    url(r'^$', views.CustomLoginView.as_view(), name='login'),
+    url(r'^logout/$', views.logout_view, name='logout'),
+    url(r'^profile/$', views.profile_view, name='profile'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/(?P<email>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})/$',
         resources.activate, name='activate'),
 ]

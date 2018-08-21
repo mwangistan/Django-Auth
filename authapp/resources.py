@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.http import HttpResponse
-from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 
 class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
+    '''
+    Token generator for email link activation. Inherits PasswordResetTokenGenerator
+    '''
     def _make_hash_value(self, user, timestamp):
         return (six.text_type(user.pk) + six.text_type(timestamp)) +  six.text_type(user.is_active)
 
@@ -24,6 +26,6 @@ def activate(request, uidb64, token, email):
         user.is_active = True
         user.email = email
         user.save()
-        return redirect('/account/two_factor/setup/')
+        return redirect('/')
     else:
         return HttpResponse('Activation link is invalid!')
